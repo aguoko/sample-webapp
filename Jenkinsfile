@@ -1,17 +1,17 @@
-def remote = [:]
-    remote.name = 'Docker-server'
-    remote.host = '18.119.130.224'
-    remote.user = 'ubuntu'
-    remote.password = 'December2023#'
-    remote.allowAnyHosts = true
+// def remote = [:]
+//     remote.name = 'Docker-server'
+//     remote.host = '18.119.130.224'
+//     remote.user = 'ubuntu'
+//     remote.password = 'December2023#'
+//     remote.allowAnyHosts = true
 
 pipeline {
     agent any
     environment {
         VERSION = "${env.BUILD_ID}"
-        AWS_ACCOUNT_ID="011138670495"
-        AWS_DEFAULT_REGION="us-east-2"
-        IMAGE_REPO_NAME="docker-class"
+        AWS_ACCOUNT_ID="951560552344"
+        AWS_DEFAULT_REGION="eu-west-2"
+        IMAGE_REPO_NAME="aguoko"
         IMAGE_TAG= "${env.BUILD_ID}"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
@@ -56,14 +56,14 @@ pipeline {
                              }
                          }
                      }
-        stage('Deploy to Docker-Server Via SSH') {
-          steps{
-      sshCommand remote: remote, command: "ls -lrt"
-      sshCommand remote: remote, command: """aws ecr --profile docker-user get-login-password --region us-east-2 | docker login --username AWS --password-stdin 011138670495.dkr.ecr.us-east-2.amazonaws.com"""
-      sshCommand remote: remote, command: "docker pull 011138670495.dkr.ecr.us-east-2.amazonaws.com/docker-class:4"
-      sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 011138670495.dkr.ecr.us-east-2.amazonaws.com/docker-class:4"
-      }
-      }  
+      //   stage('Deploy to Docker-Server Via SSH') {
+      //     steps{
+      // sshCommand remote: remote, command: "ls -lrt"
+      // sshCommand remote: remote, command: """aws ecr --profile docker-user get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 951560552344.dkr.ecr.eu-west-2.amazonaws.com"""
+      // sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.us-east-2.amazonaws.com/aguoko:1"
+      // sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 011138670495.dkr.ecr.eu-west-2.amazonaws.com/aguoko:1"
+      // }
+      // }  
 
 
     }
