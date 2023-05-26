@@ -11,7 +11,7 @@ pipeline {
         VERSION = "${env.BUILD_ID}"
         AWS_ACCOUNT_ID="951560552344"
         AWS_DEFAULT_REGION="eu-west-2"
-        IMAGE_REPO_NAME="aguoo"
+        IMAGE_REPO_NAME="aguoko"
         IMAGE_TAG= "${env.BUILD_ID}"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
