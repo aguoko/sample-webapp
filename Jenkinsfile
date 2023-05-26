@@ -59,7 +59,7 @@ pipeline {
         stage('Deploy to Docker-Server Via SSH') {
           steps{
       sshCommand remote: remote, command: "ls -lrt"
-      sshCommand remote: remote, command: """aws ecr --profile new-docker get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 951560552344.dkr.ecr.eu-west-2.amazonaws.com"""
+      sshCommand remote: remote, command: """aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"""
       sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:3"
       sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 011138670495.dkr.ecr.eu-west-2.amazonaws.com/aguoko:3"
       }
