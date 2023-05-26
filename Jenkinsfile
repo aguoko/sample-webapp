@@ -15,13 +15,8 @@ pipeline {
         IMAGE_TAG= "${env.BUILD_ID}"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
-    // stages {
-    //       stage('Git checkout') {
-    //         steps {
-    //             git branch: 'main', credentialsId: '', url: 'https://github.com/obiomaokorowu/sample-web-app.git'
-    //         }
-    //     }
-
+    stages {
+          
           stage('Logging into AWS ECR') {
                      environment {
                         AWS_ACCESS_KEY_ID = credentials('aws_access_key')
@@ -48,7 +43,7 @@ pipeline {
         
           stage('Pushing to ECR') {
              environment {
-                        AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
+                        AWS_ACCESS_KEY_ID = credentials('aws_access_key')
                         AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
                          
                    }
@@ -58,16 +53,15 @@ pipeline {
                     sh """aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"""
                     sh """docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"""
                     sh """docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"""
-         }
-        }
-      }
- }
-        stage('Deploy to Decker-SErver Via SSH') {
+                             }
+                         }
+                     }
+        stage('Deploy to Docker-Server Via SSH') {
           steps{
       sshCommand remote: remote, command: "ls -lrt"
-      sshCommand remote: remote, command: "aws --profile new-docker ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-      sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:8"
-      sshCommand remote: remote, command: "docker run -d -p 80:80 --name webapp 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:8"
+      sshCommand remote: remote, command: """aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 951560552344.dkr.ecr.eu-west-2.amazonaws.com"""
+      sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:18"
+      sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:18"
       }
       }  
 
