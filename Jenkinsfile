@@ -1,9 +1,9 @@
-// def remote = [:]
-//     remote.name = 'Docker-server'
-//     remote.host = '18.119.130.224'
-//     remote.user = 'ubuntu'
-//     remote.password = 'December2023#'
-//     remote.allowAnyHosts = true
+def remote = [:]
+    remote.name = 'Docker-server'
+    remote.host = '13.40.73.31'
+    remote.user = 'ubuntu'
+    remote.password = 'oko12345'
+    remote.allowAnyHosts = true
 
 pipeline {
     agent any
@@ -56,14 +56,14 @@ pipeline {
                              }
                          }
                      }
-      //   stage('Deploy to Docker-Server Via SSH') {
-      //     steps{
-      // sshCommand remote: remote, command: "ls -lrt"
-      // sshCommand remote: remote, command: """aws ecr --profile docker-user get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 951560552344.dkr.ecr.eu-west-2.amazonaws.com"""
-      // sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.us-east-2.amazonaws.com/aguoko:1"
-      // sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 011138670495.dkr.ecr.eu-west-2.amazonaws.com/aguoko:1"
-      // }
-      // }  
+        stage('Deploy to Docker-Server Via SSH') {
+          steps{
+      sshCommand remote: remote, command: "ls -lrt"
+      sshCommand remote: remote, command: """aws ecr --profile new-docker get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 951560552344.dkr.ecr.eu-west-2.amazonaws.com"""
+      sshCommand remote: remote, command: "docker pull 951560552344.dkr.ecr.eu-west-2.amazonaws.com/aguoko:3"
+      sshCommand remote: remote, command: "docker run -d -p 9090:80 --name webapp 011138670495.dkr.ecr.eu-west-2.amazonaws.com/aguoko:3"
+      }
+      }  
 
 
     }
